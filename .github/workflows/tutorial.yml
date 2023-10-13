@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
   Setup:
     runs-on: ubuntu-latest
@@ -30,15 +31,18 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
 
-  e2e-test:
+  Build:
+    needs: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Project
+        run: yarn build
+
+  Playwright-e2e-test:
     needs: Setup
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
       - name: Run Playwright tests
