@@ -9,8 +9,6 @@ on:
 jobs:
   Setup:
     runs-on: ubuntu-latest
-    outputs:
-      app-path: ${{steps.checkout.outputs.path}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,6 +30,12 @@ jobs:
       - name: Install Dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
+
+      - name: Save Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: project-artifact
+          path: . # Save the entire project directory
 
   Playwright-e2e-test:
     needs: Setup
@@ -55,6 +59,11 @@ jobs:
     needs: Setup
     runs-on: ubuntu-latest
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: project-artifact # Specify the name of the artifact to download
+
       - name: List files in the current directory
         run: |
           ls -al
@@ -63,7 +72,6 @@ jobs:
           find . -name package.json
       - name: Build Project
         run: |
-          cd ${{ needs.Setup.outputs.app-path }}
           yarn build
 
   Deploy:
@@ -72,5 +80,4 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          cd ${{ needs.Setup.outputs.app-path }}
           yarn start
