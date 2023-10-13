@@ -49,12 +49,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v1
         with:
-          name: project-artifact
-
-      - name: Move to artifact folder
-        run: |
-          cd ./project-artifact
-
+          name: project-artifact # Specify the name of the artifact to download
       - name: Cache dependencies
         uses: actions/cache@v3
         id: yarn-cache
@@ -74,6 +69,8 @@ jobs:
 
       - name: Build Project
         run: |
+          cd ./project-artifact
+          ls -al
           yarn build
 
   Deploy:
