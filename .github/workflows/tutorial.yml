@@ -31,13 +31,6 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
 
-  Build:
-    needs: Setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Project
-        run: yarn run build
-
   Playwright-e2e-test:
     needs: Setup
     timeout-minutes: 60
@@ -53,3 +46,17 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+  Build:
+    needs: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Project
+        run: yarn run build
+
+  Deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: yarn start
