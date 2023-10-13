@@ -36,7 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build Project
-        run: yarn build
+        working-directory: ./github_action_tutorial
+        run: yarn run build
 
   Playwright-e2e-test:
     needs: Setup
