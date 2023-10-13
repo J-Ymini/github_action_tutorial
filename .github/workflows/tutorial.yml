@@ -66,11 +66,10 @@ jobs:
       - name: List files in the current directory
         run: |
           ls -al
-      - name: Find package.json file
-        run: |
-          find . -name package.json
+
       - name: Build Project
         run: |
+          cd ./project-artifact
           yarn build
 
   Deploy:
