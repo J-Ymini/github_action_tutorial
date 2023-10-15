@@ -1,0 +1,35 @@
+name: GitHub Actions Tutorial
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  workflow_call:
+
+jobs:
+  Run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install Dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Check list
+        run: ls -al
+
+      - name: Run Tests
+        run: yarn test

@@ -1,13 +1,10 @@
 name: GitHub Actions Tutorial
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_call:
 
 jobs:
-  Playwright-e2e-test:
+  Run:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +35,7 @@ jobs:
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
 
-      - name: Run Playwright tests
+      - name: Run tests
         run: yarn playwright test
 
       - uses: actions/upload-artifact@v3
@@ -47,33 +44,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-
-  Build-And-Deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install Dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install
-
-      - name: Check list
-        run: ls -al
-
-      - name: Build Project
-        run: yarn build

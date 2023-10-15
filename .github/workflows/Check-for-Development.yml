@@ -1,0 +1,17 @@
+name: GitHub Actions Tutorial
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  pull_request:
+    branches:
+      - /^release\//
+
+jobs:
+  Unit-test:
+    uses: ./.github/workflows/Unit-test.yml
+
+  E2E-test:
+    uses: ./.github/workflows/E2E-test.yml
+
+  Check-build:
+    uses: ./.github/workflows/Reusable-Deploy.yml
+    needs: [E2E-test, Unit-test]
