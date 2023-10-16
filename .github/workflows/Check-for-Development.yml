@@ -1,9 +1,12 @@
 name: GitHub Actions Tutorial
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
+  push:
+    branches:
+      - 'feature/**'
   pull_request:
     branches:
-      - /^release\//
+      - 'release/**'
 
 jobs:
   Unit-test:
