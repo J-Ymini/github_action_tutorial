@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - 'feature/**'
-  pull_request:
-    branches:
-      - 'release/**'
+      - 'hotfix/**'
 
 jobs:
   Unit-test:
