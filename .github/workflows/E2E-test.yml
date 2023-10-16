@@ -4,7 +4,6 @@ on:
 jobs:
   Run:
     timeout-minutes: 60
-    if: startsWith(github.ref, 'refs/heads/feat/') || startsWith(github.ref, 'refs/heads/hotfix/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
